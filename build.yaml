@@ -22,6 +22,8 @@ builders:
         include: ["lib/graphql/**/*.graphql"]
         # Optional: exclude globs
         exclude: []
+        # Optional: When non-empty, per-file outputs are disabled (aggregate-only mode).
+        output_subdir: ""
 
   graphql_aggregate_builder:
     import: "package:gql_gen/src/aggregate_builder.dart"
@@ -35,3 +37,7 @@ builders:
         mode: embed
         include: ["lib/graphql/**/*.graphql"]
         exclude: []
+        # Optional: When non-empty, only the aggregate file is generated.
+        # NOTE: The aggregate output path is fixed to lib/graphql/generatedOutputs/Queries.dart by build.yaml.
+        # To change the output folder, modify this mapping in build.yaml.
+        output_subdir: ""

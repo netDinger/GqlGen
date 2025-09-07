@@ -1,3 +1,8 @@
+### String escaping
+
+In embed mode the generator writes raw triple-quoted Dart strings (`r'''...'''`) so that
+GraphQL variables like `$id` and newlines are preserved without Dart string interpolation.
+
 ## gql_gen
 
 Small builder to turn GraphQL `.graphql` files into Dart strings.
@@ -36,11 +41,19 @@ mode: embed  # or 'load'
 include:
   - lib/graphql/**/*.graphql
 exclude: []
+# When non-empty, disables per-file outputs and generates only the aggregate file.
+# Note: Due to build_runner constraints the aggregate output path is fixed to
+# lib/graphql/generatedOutputs/Queries.dart. To change it, edit build.yaml.
+output_subdir: ""
 ```
 
 Notes:
 
-- Output folder for the aggregate file is fixed to `lib/graphql/generatedOutputs/Queries.dart` (to satisfy build_runner's output mapping). If you need a different path, override the builder mapping in your own build.yaml.
+- Output behavior:
+  - When `output_subdir` is empty (default): only per-file outputs are generated next to each `.graphql` file.
+  - When `output_subdir` is non-empty: per-file outputs are disabled and only the aggregate file is generated.
+  - Aggregate output path is fixed to `lib/graphql/generatedOutputs/Queries.dart` by `build.yaml`.
+    If you need a different path, change the mapping in `build.yaml`.
 
 ### Run
 
