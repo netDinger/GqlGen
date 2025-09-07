@@ -1,9 +1,9 @@
 name: gql_gen
 description: "Graphql Code Generator"
 version: 0.0.1
-homepage: https://github.com/netDinger/GqlGen
-repository: https://github.com/netDinger/GqlGen
-issue_tracker: https://github.com/netDinger/GqlGen/issues
+homepage: 'https://github.com/netDinger/GqlGen'
+repository: 'https://github.com/netDinger/GqlGen'
+issue_tracker: 'https://github.com/netDinger/GqlGen/issues'
 
 
 environment:
