@@ -28,6 +28,11 @@ class _GraphQLAggregateBuilder implements Builder {
 
     final cfg = await _resolveConfig(buildStep);
 
+    // If no outputSubdir is specified, we are in per-file mode: skip aggregate.
+    if (!cfg.emitAggregate) {
+      return;
+    }
+
     // Discover all matching .graphql assets.
     final packageName = buildStep.inputId.package;
     final assets = <AssetId>[];
@@ -93,8 +98,9 @@ class _GraphQLAggregateBuilder implements Builder {
       if (cfg.mode == 'load') {
         buf.writeln('Future<String> get $varName => _gql_loader.loadQuery(${varName}Path, package: ${jsonEncode(packageName)});');
       } else {
-        final encoded = jsonEncode(content);
-        buf.writeln('const String $varName = $encoded;');
+        // Use raw triple-quoted string to avoid interpolation of $ and preserve newlines.
+        final raw = "r'''${content}'''";
+        buf.writeln('const String $varName = ' + raw + ';');
       }
       buf.writeln();
     }

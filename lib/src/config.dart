@@ -19,7 +19,7 @@ class GqlGenConfig {
 
   static const GqlGenConfig defaults = GqlGenConfig(
     mode: 'embed',
-    outputSubdir: 'graphql/generatedOutputs',
+    outputSubdir: '',
     include: ['lib/**/*.graphql'],
     exclude: <String>[],
   );
@@ -56,6 +56,14 @@ class GqlGenConfig {
       return defaults;
     }
   }
+}
+
+extension GqlGenConfigBehavior on GqlGenConfig {
+  /// Emit per-file outputs when no outputSubdir is specified.
+  bool get emitPerFile => outputSubdir.trim().isEmpty;
+
+  /// Emit aggregate output only when an outputSubdir is specified.
+  bool get emitAggregate => outputSubdir.trim().isNotEmpty;
 }
 
 List<String>? _stringList(Object? value) {

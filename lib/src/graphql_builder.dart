@@ -32,6 +32,11 @@ class _GraphQLStringBuilder implements Builder {
     final optCfg = GqlGenConfig.fromOptions(_options);
     final cfg = yamlCfg != GqlGenConfig.defaults ? yamlCfg : optCfg;
 
+    // If outputSubdir is provided (aggregate mode), skip per-file outputs.
+    if (!cfg.emitPerFile) {
+      return;
+    }
+
     // Filter by include/exclude if configured.
     if (!_matchesAny(inputId.path, cfg.include)) return;
     if (_matchesAny(inputId.path, cfg.exclude)) return;
@@ -89,8 +94,7 @@ String _generateEmbedSource({
   required String originalPath,
   required String content,
 }) {
-  final encoded = jsonEncode(content);
-  return '''
+  return """
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // *****************************************************
 //  gql_gen: embed mode - strings are inlined at compile time
@@ -102,8 +106,8 @@ library $libName;
 const String ${variableBase}Path = ${jsonEncode(originalPath)};
 
 /// GraphQL document content from [${originalPath}].
-const String $variableBase = $encoded;
-''';
+const String $variableBase = r'''$content''';
+""";
 }
 
 String _generateLoadSource({
